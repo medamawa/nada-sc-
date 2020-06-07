@@ -68,7 +68,9 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            // User.phpをデフォルトから移動したのに伴い、変更
+            // 'model' => App\User::class,
+            'model' => App\Models\User::class,
         ],
 
         // 'users' => [

@@ -26,7 +26,7 @@ class RegisterController extends Controller
 
     public function __construct(AccessKey $accessKey)
     {
-        $this->middleware('guest');
+        // $this->middleware('guest');
         $this->now = Carbon::now()->format('Y-m-d H:i:s');
         $this->accessKey = $accessKey;
     }
@@ -70,6 +70,27 @@ class RegisterController extends Controller
     }
 
     /**
+     * メール認証コードを検証してパスワードの入力を要求
+     *
+     * @param  Request
+     * @return view
+     */
+    public function checkUser(Request $request)
+    {
+        $code = $request->code;
+
+        // コードが有効かどうか確認
+        if (!$this->checkCode($code)) {
+            return view('error.error', ['msg' => 'invalid action code']);
+        } else {
+            $email = Activation::where('code', $code)->select('email')->first();
+            $data = ['email' => $email['email'], 'code' => $code];
+
+            return view('auth.verify', $data);
+        }
+    }
+
+    /**
      * メール認証コードを検証してユーザー情報の登録
      *
      * @param  Request
@@ -78,11 +99,11 @@ class RegisterController extends Controller
     public function verify(Request $request)
     {
         $code = $request->code;
+        $password = $request->password;
 
         // 認証確認
-        if (!$this->checkCode($code)) {
-
-            return response()->json(['msg' => 'failed']);
+        if (!$this->checkPassword($code, $password)) {
+            return view('error.error', ['msg' => 'checkPassword was failed']);
         } else {
             // ユーザー情報の登録
             DB::beginTransaction();
@@ -103,7 +124,7 @@ class RegisterController extends Controller
             } catch (\Exception $e) {
                 DB::rollBack();
 
-                return response()->json(['msg' => 'failed!', 'error' => $e]);
+                return view('error.error', ['msg' => $e]);
             }
         }
     }
@@ -133,5 +154,33 @@ class RegisterController extends Controller
         $now = Carbon::now();
 
         return $code == $latest->code && !$user && $now->lt($expire_at);
+    }
+
+    /**
+     * パスワードの検証
+     *
+     * 1. 与えられた認証コードがActivations.codeに存在するか？
+     * 2. users.emailが存在し、ユーザー登録が既に完了しているメールアドレスかどうか？
+     * 3. 認証コード発行後1日以内に発行された認証コードであるか？
+     * 4. 認証コードが指すパスワードと一致しているか？
+     * 
+     * @param  string $code - メール認証のURLパラメータから取得する認証コード
+     * @return boolean
+     */
+    private function checkPassword($code, $password)
+    {
+        $activation = Activation::where('code', $code)->first();
+        if (!$activation) {
+            return false;
+        }
+
+        $activation_email = $activation->email;
+        $latest = Activation::where('email', $activation_email)->orderBy('created_at', 'desc')->first();
+        $user = User::where('email', $activation_email)->first();
+        $activation_created_at = Carbon::parse($activation->created_at);
+        $expire_at = $activation_created_at->addDay(1);
+        $now = Carbon::now();
+
+        return $code == $latest->code && !$user && $now->lt($expire_at) && Hash::check($password, $activation->password);
     }
 }

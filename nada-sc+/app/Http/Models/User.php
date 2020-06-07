@@ -33,6 +33,6 @@ class User extends Authenticatable
         parent::__construct($attributes);
 
         // newした時に自動的にuuidを設定する。
-        $this->attributes['user_id'] = Uuid::uuid4()->toString();
+        $this->attributes['id'] = Uuid::uuid4()->toString();
     }
 }

@@ -1,28 +1,20 @@
-@extends('layouts.app')
-
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Verify Your Email Address') }}</div>
-
-                <div class="card-body">
-                    @if (session('resent'))
-                        <div class="alert alert-success" role="alert">
-                            {{ __('A fresh verification link has been sent to your email address.') }}
-                        </div>
-                    @endif
-
-                    {{ __('Before proceeding, please check your email for a verification link.') }}
-                    {{ __('If you did not receive the email') }},
-                    <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
-                        @csrf
-                        <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('click here to request another') }}</button>.
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
+<body>
+    <h1>Verify</h1>
+    <form method="POST" action="{{ route('auth.register.verify') }}">
+        @csrf
+        <input type="hidden" name="code" value="{{ $code }}" readonly="true" >
+        [email]
+        <input type="text" name="email" value="{{ $email }}" readonly="true" style="border: none">
+        @if ($errors->has('email'))
+        {{$errors->first('email')}}
+        @endif
+        <br>
+        [password]
+        <input type="text" name="password">
+        @if ($errors->has('password'))
+        {{$errors->first('password')}}
+        @endif
+        <br>
+        <input type="submit">
+    </form>
+</body>

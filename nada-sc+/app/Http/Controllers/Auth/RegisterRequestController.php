@@ -16,8 +16,8 @@ class RegisterRequestController extends Controller
     public function post(Request $request, AccessKey $accessKey)
     {
         $request->validate([
-            'code' => ['required', 'string'],
-            'pass' => ['required', 'string'],
+            'student_code' => ['required', 'string'],
+            'password' => ['required', 'string'],
         ]);
 
         // 片方ずつしか判定できないので修正する
@@ -29,7 +29,7 @@ class RegisterRequestController extends Controller
             return view('auth.registerRequest', ['msg' => 'invalid pass']);
         }
 
-        $data = $accessKey->getData($request->code);
+        $data = $accessKey->getData($request->student_code);
 
         return view('auth.register', $data);
     }

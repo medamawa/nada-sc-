@@ -1,18 +1,18 @@
 <body>
     <h1>Register</h1>
-    <form method="POST" action="{{ route('auth.register.pre_check') }}">
+    <form method="POST" action="{{ route('auth.register.pre') }}">
         @csrf
         [student_code]
         {{ $student_code }}
-        <input type="text" value="{{ $student_code }}" name="student_code" readonly="true" style="border: none">
+        <input type="hidden" value="{{ $student_code }}" name="student_code" readonly="true" style="border: none">
         <br>
         [name]
         {{ $name }}
-        <input type="text" value="{{ $name }}" name="name" readonly="true" style="border: none">
+        <input type="hidden" value="{{ $name }}" name="name" readonly="true" style="border: none">
         <br>
         [class]
         {{ $class }}回生
-        <input type="text" value="{{ $class }}" name="class" readonly="true" style="border: none">
+        <input type="hidden" value="{{ $class }}" name="class" readonly="true" style="border: none">
         <br>
         [email]
         <input type="text" name="email">
