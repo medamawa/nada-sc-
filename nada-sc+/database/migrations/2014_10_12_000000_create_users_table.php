@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('student_code')->comment('生徒コード');
             $table->string('user_name')->comment('ユーザー名');
             $table->string('class')->comment('回生');
+            $table->boolean('isAdmin')->default(false)->comment('管理者');
             $table->string('email')->unique('メールアドレス');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->comment('パスワード');
