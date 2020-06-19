@@ -165,6 +165,7 @@ class RegisterController extends Controller
      * 4. 認証コードが指すパスワードと一致しているか？
      * 
      * @param  string $code - メール認証のURLパラメータから取得する認証コード
+     * @param  string $password - ユーザーのパスワード
      * @return boolean
      */
     private function checkPassword($code, $password)

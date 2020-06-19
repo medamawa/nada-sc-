@@ -14,7 +14,7 @@ class CreateClubsTable extends Migration
     public function up()
     {
         Schema::create('clubs', function (Blueprint $table) {
-            $table->bigIncrements('id')->comment('クラブID');
+            $table->uuid('id')->primary()->comment('クラブID');
             $table->string('name')->comment('クラブ名');
             $table->timestamps();
         });

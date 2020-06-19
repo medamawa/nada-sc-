@@ -15,7 +15,7 @@ class CreateMembersTable extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->uuid('id')->primary()->comment('メンバーID');
-            $table->bigInteger('club_id')->comment('クラブID');
+            $table->string('club_id')->comment('クラブID');
             $table->string('user_id')->comment('ユーザーID');
             $table->boolean('isAdmin')->default(false)->comment('管理者');
             $table->timestamps();

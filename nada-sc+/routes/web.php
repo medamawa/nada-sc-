@@ -31,3 +31,14 @@ Route::post('/register/verify', 'Auth\RegisterController@verify')->name('auth.re
 Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::prefix('club')->group(function() {
+        Route::get('/create', 'ClubController@create')->name('club.create');
+        Route::post('/create', 'ClubController@store')->name('club.store');
+
+        Route::get('/join', 'ClubController@join')->name('club.join');
+
+        Route::get('/n/{name}', 'ClubController@home')->name('club.n.home');
+    });
+});

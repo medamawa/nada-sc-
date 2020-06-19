@@ -21,11 +21,11 @@ class RegisterRequestController extends Controller
         ]);
 
         // 片方ずつしか判定できないので修正する
-        if (!$accessKey->codeIsOk($request->code)) {
+        if (!$accessKey->codeIsOk($request->student_code)) {
             return view('auth.registerRequest', ['msg' => 'invalid code']);
         }
 
-        if (!$accessKey->passIsOk($request->code, $request->pass)) {
+        if (!$accessKey->passIsOk($request->student_code, $request->password)) {
             return view('auth.registerRequest', ['msg' => 'invalid pass']);
         }
 
