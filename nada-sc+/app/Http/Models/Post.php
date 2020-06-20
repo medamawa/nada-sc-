@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Ramsey\Uuid\Uuid;
 
-class Club extends Model
+class Post extends Model
 {
     use Notifiable;
 
@@ -23,18 +23,18 @@ class Club extends Model
         $this->attributes['id'] = Uuid::uuid4()->toString();
     }
 
-    public function store(String $name)
+    public function post(String $club_id, String $user_id, String $title, String $body)
     {
-        // DBへ登録
-        $this->name = $name;
+        // DBへ新しい投稿を登録
+        $this->club_id = $club_id;
+        $this->user_id = $user_id;
+        $this->title = $title;
+        $this->body = $body;
         $this->save();
-        
-        // idを返す
-        return $this->where('name', $name)->value('id');
     }
 
-    public function getId(String $name)
+    public function getPosts(String $club_id)
     {
-        return $this->where('name', $name)->value('id');
+        return $this->where('club_id', $club_id)->orderBy('created_at', 'DESC')->paginate(50);
     }
 }

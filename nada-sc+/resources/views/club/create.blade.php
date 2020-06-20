@@ -4,8 +4,8 @@
         @csrf
         [club_name]
         <input type="text" name="name">
-        @if ($errors->has('club_name'))
-        {{ $errors->first('club_name') }}
+        @if ($errors->has('name'))
+        {{ $errors->first('name') }}
         @endif
         <br>
         <input type="submit">

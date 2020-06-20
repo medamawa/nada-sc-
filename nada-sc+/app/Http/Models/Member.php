@@ -43,4 +43,15 @@ class Member extends Model
 
         return ;
     }
+
+    public function getMembers(String $club_id)
+    {
+        $members = $this->leftJoin('users', 'users.id', '=', 'members.user_id')
+        ->where('club_id', $club_id)
+        ->select('users.user_name', 'members.isAdmin')
+        ->get();
+
+
+        return $members;
+    }
 }

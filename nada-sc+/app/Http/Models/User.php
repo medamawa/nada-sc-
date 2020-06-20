@@ -35,4 +35,12 @@ class User extends Authenticatable
         // newした時に自動的にuuidを設定する。
         $this->attributes['id'] = Uuid::uuid4()->toString();
     }
+
+    public function getUser(String $id)
+    {
+        // idからユーザーを取得
+        $user = $this->where('id', $id)->first();
+
+        return $user;
+    }
 }

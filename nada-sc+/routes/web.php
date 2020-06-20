@@ -33,12 +33,20 @@ Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::prefix('club')->group(function() {
+    Route::prefix('/club')->group(function() {
         Route::get('/create', 'ClubController@create')->name('club.create');
         Route::post('/create', 'ClubController@store')->name('club.store');
 
         Route::get('/join', 'ClubController@join')->name('club.join');
 
-        Route::get('/n/{name}', 'ClubController@home')->name('club.n.home');
+        Route::prefix('/n/{name}')->group(function() {  // {name}が存在するか確認するミドルウェアを実装
+            Route::get('/', 'ClubController@home')->name('club.n.home');
+            Route::get('/members', 'ClubController@members')->name('club.n.members');
+            Route::get('/admin', 'ClubController@admin')->name('club.n.admin');    // adminのミドルウェアを実装
+
+            Route::get('/post', 'PostController@create')->name('club.n.post.create');
+            Route::post('/post', 'PostController@store')->name('club.n.post.store');
+            Route::get('/index', 'PostController@index')->name('club.n.index');
+        });
     });
 });

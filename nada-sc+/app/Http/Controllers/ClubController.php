@@ -31,11 +31,7 @@ class ClubController extends Controller
         // 作成したユーザーを管理者ユーザーとして登録
         $member->addAdminUser($id, $user->id);
 
-        // 作成したクラブのurlを作成する
-        $appUrl = config('app.url');
-        $url = $appUrl . '/club/n/' . $name;
-
-        return view('club.create', ['msg' => $url]);
+        return redirect(route('club.n.home', ['name' => $name]));
     }
 
     // idを受け取ってその該当するクラブにログインしているユーザーを追加する
@@ -59,10 +55,31 @@ class ClubController extends Controller
         }
     }
 
-    // クラブのホーム外面を表示
+    // クラブのホーム画面を表示
     public function home(Request $request)
     {
         return view('club.n.home', ['name' => $request->name]);
+    }
+
+    // クラブに所属しているメンバーの一覧を表示
+    public function members(Request $request, Club $club, Member $member)
+    {
+        // クラブ名を取得
+        $name = $request->name;
+
+        // クラブidを取得
+        $club_id = $club->getId($name);
+
+        // メンバー一覧を取得
+        $members = $member->getMembers($club_id);
+
+        return view('club.n.members', ['name' => $request->name, 'members' => $members]);
+    }
+
+    // クラブの管理画面を表示
+    public function admin(Request $request)
+    {
+        return view('club.n.admin', ['name' => $request->name]);
     }
 
     /**
