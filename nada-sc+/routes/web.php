@@ -33,6 +33,8 @@ Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/me', 'UserController@index')->name('me');
+
     Route::prefix('/club')->group(function() {
         Route::get('/create', 'ClubController@create')->name('club.create');
         Route::post('/create', 'ClubController@store')->name('club.store');

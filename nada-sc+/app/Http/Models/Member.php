@@ -51,7 +51,6 @@ class Member extends Model
         ->select('users.user_name', 'members.isAdmin')
         ->get();
 
-
         return $members;
     }
 }

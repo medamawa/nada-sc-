@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 class User extends Authenticatable
@@ -42,5 +43,11 @@ class User extends Authenticatable
         $user = $this->where('id', $id)->first();
 
         return $user;
+    }
+
+    public function getAccounts(String $student_code, String $id)
+    {
+        // idを指定したユーザーは除く
+        return $this->where('student_code', $student_code)->where('id', '<>', $id)->get();
     }
 }
