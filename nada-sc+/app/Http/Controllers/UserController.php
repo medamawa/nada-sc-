@@ -17,4 +17,10 @@ class UserController extends Controller
 
         return view('me', ['user' => $login_user, 'accounts' => $accounts]);
     }
+
+    // ページの管理画面を表示
+    public function admin()
+    {
+        return view('admin.home');
+    }
 }
