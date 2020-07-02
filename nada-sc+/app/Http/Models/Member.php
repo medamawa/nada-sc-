@@ -44,6 +44,17 @@ class Member extends Model
         return ;
     }
 
+    public function removeUser(String $club_id, String $user_id)
+    {
+        // DBから指定されたユーザーを消去
+        // TODO: softdeleteを実装
+        // TODO: 管理者は一人は必ず残しておかなければいけない
+        $user = $this->where('club_id', $club_id)->where('user_id', $user_id)->get();
+        $user->delete();
+
+        return ;
+    }
+
     public function getMembers(String $club_id)
     {
         $members = $this->leftJoin('users', 'users.id', '=', 'members.user_id')

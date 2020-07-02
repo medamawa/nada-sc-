@@ -37,4 +37,9 @@ class Club extends Model
     {
         return $this->where('name', $name)->value('id');
     }
+
+    public function getName(String $id)
+    {
+        return $this->where('id', $id)->value('name');
+    }
 }
